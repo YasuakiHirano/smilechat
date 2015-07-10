@@ -17,10 +17,19 @@
     </head>
     <body>
 		<div style="width:100%;margin:10px 0;">
-			<input type="text" id="text" size=20></input>
-			<button  onclick='sendMsg();' >message</button>
+			<input type="text" id="text" size="60"></input>
+			<button  onclick='sendMsg();' >message</button><br />
+			<input id="clearChk" type="checkbox" checked/>post clear message.
 		</div>
 		<div id="chat-stage" style="width:600px; height:600px; border:1px solid #000; position:absolute;">
 		</div>
+		<div id="logArea" style="width:300px; height:30px; border:1px solid #000; position:absolute; bottom:0;scroll-y:auto;background:white; font-size:80%;">
+			<ul>
+			</ul>
+		</div>
+		<div id="toolArea" style="width:100%; height:30px; border:1px solid #000; position:absolute; bottom:0;background:white;">
+			<div style="padding:4px;"><input type="button" value="showLog" onclick="showLog('logArea');"/></div>
+		</div>
+
     </body>
 </html>

@@ -83,6 +83,10 @@ function sendMsg(){
 	socket.emit("msg send", mymsg);
 
 	showMessage('#text_'+mychar.id, mymsg);
+
+	if($("#clearChk").prop('checked')){
+		$('#text').val("");
+	}
 }
 
 function showMessage(selecter, msg){
@@ -96,8 +100,21 @@ function showMessage(selecter, msg){
 		$(selecter).css("background", "none;");
 		$(selecter).css("padding", "0px;");
 	}, 3000);
+
+	//ログに追加
+	$('#logArea ul').prepend('<li>'+msg+'</li>');
+}
+
+function showLog(selecter){
+	var height = $("#" + selecter).height();	
+	if(height <= 300){
+		$("#" + selecter).height(height+50);
+	} else {
+		$("#" + selecter).height(30);
+	}
 }
 
 function updatePosition(id, x, y){
     $('#'+id).animate({'top':y,'left':x},500);
 }
+
