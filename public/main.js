@@ -1,11 +1,29 @@
-var Chara = function(id, x, y){
+var Chara = function(id, x, y, chartxt, name){
 	this.x = x;
 	this.y = y;
-	this.name = 'player';
+	this.addStyle = "";
+
+	if(chartxt.trim() == '' || chartxt == undefined || chartxt == null){
+		this.chartxt = '☺';
+	} else {
+		this.chartxt = chartxt;	
+		this.addStyle = "font-size:130%;";
+	}
+
+	if(chartxt.trim().length <= 2){
+		this.addStyle = "font-size:280%;";
+	}
+
+	if(name.trim() == '' || name == undefined || name == null){
+		this.name = 'player';
+	} else {
+		this.name = name;
+	}
+
 	this.image =    "<div id='" + id + "' style='position:absolute;top:" + this.y + "px; left:" + this.x + "px;'>" + 
-					"<div id='text_" + id + "' ></div>" + 
-					"<div id='char_"+ id + "' style='width:50px;height:50px;padding-left:3px;font-size:280%'>☺</div>" +
-					"<div>" + this.name + ":" + id + "</div>"+
+					"<div id='text_" + id + "' style='height:20px;' ></div>" + 
+					"<div id='char_"+ id + "' style='padding:10px 0;padding-left:3px;" + this.addStyle + "'>" + this.chartxt + "</div>" +
+					"<div>" + this.name + " :[" + id + "]</div>"+
 					"</div>";
 
 	this.id = id;
@@ -23,7 +41,7 @@ function random_code()
 }
 
 $(function(){
-    $('#chat-stage').click(function(event) {
+    $('#chatStage').click(function(event) {
 
 		mychar.x = event.clientX;
 		mychar.y = event.clientY;
@@ -35,31 +53,55 @@ $(function(){
 
 var characters = {};
 window.onload=function(){
-	
+	//初期表示制御
+	notDisplayChatStage();
+}
+
+function notDisplayChatStage(){
+	$("#chatStage").css("display", "none");
+	$("#inputStage").css("display", "block");
+	$("#messageArea").css("display", "none");
+	$("#logArea").css("display", "none");
+	$("#toolArea").css("display", "none");
+}
+
+function showDisplayChatStage(){
+	$("#chatStage").css("display", "block");
+	$("#inputStage").css("display", "none");
+	$("#messageArea").css("display", "block");
+	$("#logArea").css("display", "block");
+	$("#toolArea").css("display", "block");
+}
+
+function startSmileChat(){
 	this.socket = io.connect(location.href);
 	var socket = this.socket;
+	var chartxt = $("#inputCharText").val();
+	var playername = $("#inputPlayerName").val();
+
+
 	socket.on('connect', function() { 
 
-		socket.emit('init', 0, 10, 10);
+		socket.emit('init', 0, 10, 10, chartxt, playername);
 
 		socket.on('ready', function (id) {
 			// console.log("ready " + id);
-			mychar = new Chara(id, 10, 10);
-			$("#chat-stage").append(mychar.image);
+			mychar = new Chara(id, 10, 10, chartxt, playername);
+			$("#chatStage").append(mychar.image);
 		});
 
-		socket.on('msg push', function (id, msg) {
+		socket.on('msg push', function (id, name, msg) {
 			// EVENT:ユーザからメッセージが届いた時に通知される
 			// console.log("msg push:"+msg);
-			showMessage('#text_' + id, msg);
+			showMessage('#text_' + id, name, msg);
 		});
 		socket.on('new character', function (other_char) {
 			// EVENT:ユーザがアクセス時に通知される
 			// console.log("new character:"+other_char.id);
 			// other user add - 他のユーザがアクセス時に新規追加
 			if(mychar.id != other_char.id){
-				var new_other_char = new Chara(other_char.id, other_char.x, other_char.y);
-				$("#chat-stage").append(new_other_char.image);
+				var new_other_char = new Chara(other_char.id, other_char.x, other_char.y, other_char.chartxt, other_char.playername);
+				$("#chatStage").append(new_other_char.image);
 			}
 		});
 		socket.on('position push', function (id, x, y) {
@@ -74,6 +116,8 @@ window.onload=function(){
 		});
 
 	});
+
+	showDisplayChatStage();
 }
 
 function sendMsg(){
@@ -82,27 +126,27 @@ function sendMsg(){
 	var mymsg = $('#text').val();
 	socket.emit("msg send", mymsg);
 
-	showMessage('#text_'+mychar.id, mymsg);
+	showMessage('#text_'+mychar.id, mychar.name, mymsg);
 
 	if($("#clearChk").prop('checked')){
 		$('#text').val("");
 	}
 }
 
-function showMessage(selecter, msg){
+function showMessage(selecter, playername, msg){
 	$(selecter).text(msg);
 	$(selecter).css("background", "#333");
 	$(selecter).css("color", "#fff");
-	$(selecter).css("padding", "5px;");
+	$(selecter).css("padding", "3px");
 
   	setTimeout(function(){
 		$(selecter).text(''); 
-		$(selecter).css("background", "none;");
-		$(selecter).css("padding", "0px;");
+		$(selecter).css("background", "none");
+		$(selecter).css("padding", "0px");
 	}, 3000);
 
 	//ログに追加
-	$('#logArea ul').prepend('<li>'+msg+'</li>');
+	$('#logArea ul').prepend('<li>'+ playername + ' : ' + msg +'</li>');
 }
 
 function showLog(selecter){

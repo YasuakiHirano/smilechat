@@ -13,23 +13,66 @@
             body {
                 margin: 0;
             }
+			.textArea{
+				font-size:20px;
+				padding:5px;
+			}
+			.btnArea{
+				padding:5px 10px;
+			}
+			#logArea{
+				width:400px;
+				height:30px;
+				border:1px solid #000;
+				position:absolute;
+				bottom:0;
+				overflow-y:scroll;
+				background:white;
+				font-size:80%;
+			}
+			#logArea ul{
+				list-style-type:none;
+			}
+			#logArea ul li{
+				margin:5px 0px;
+			}
+			#chatStage{
+				width:600px;
+				height:600px;
+				border:1px solid #000;
+				position:absolute;
+				display:none;
+			}
+			#toolArea{
+				width:100%;
+				height:50px;
+				border:1px solid #000;
+				position:absolute;
+				bottom:0;
+				background:white;
+			}
         </style>
     </head>
     <body>
-		<div style="width:100%;margin:10px 0;">
-			<input type="text" id="text" size="60"></input>
-			<button  onclick='sendMsg();' >message</button><br />
+		<div id="messageArea" style="width:100%;margin:10px 0;">
+			<input type="text" id="text" size="60" style="font-size:20px;"></input>
+			<button  onclick='sendMsg();' class="btnArea">message</button><br />
 			<input id="clearChk" type="checkbox" checked/>post clear message.
 		</div>
-		<div id="chat-stage" style="width:600px; height:600px; border:1px solid #000; position:absolute;">
+		<div id="inputStage" style="display:none;">
+			<table>
+				<tr><td>player name: </td><td><input type="text" id="inputPlayerName" value="name" maxlength="10" class="textArea" /></td></tr>
+				<tr><td>charcter text : </td><td><input type="text" id="inputCharText" value="☺" maxlength="10" class="textArea"/></td></tr>	
+				<tr><td colspan="2"><button id="loginBtn" onclick="startSmileChat()" class="btnArea">chat login</button></td></tr>
+			</table>
 		</div>
-		<div id="logArea" style="width:300px; height:30px; border:1px solid #000; position:absolute; bottom:0;scroll-y:auto;background:white; font-size:80%;">
-			<ul>
-			</ul>
+		<div id="chatStage">
 		</div>
-		<div id="toolArea" style="width:100%; height:30px; border:1px solid #000; position:absolute; bottom:0;background:white;">
-			<div style="padding:4px;"><input type="button" value="showLog" onclick="showLog('logArea');"/></div>
+		<div id="logArea">
+			<ul></ul>
 		</div>
-
+		<div id="toolArea">
+			<div style="padding:4px;"><button value="showLog" onclick="showLog('logArea');"  class="btnArea" />show log</button></div>
+		</div>
     </body>
 </html>

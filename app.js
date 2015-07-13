@@ -41,19 +41,19 @@ var characters = {};
 
 io.sockets.on('connection', function (socket) { 
 	//console.log('connected');
-	socket.on('init', function (code, x, y) {
+	socket.on('init', function (code, x, y, chartxt, playername) {
 
 		if (debug_flg) log('--- init start ---');
 
-		var character = {code:code, x:x, y:y, id:chara_counter, socket:socket};
+		var character = {code:code, x:x, y:y, id:chara_counter, socket:socket, chartxt:chartxt, playername:playername};
 		socket.set('character', character, function () {
 			socket.emit('ready', chara_counter);
-			socket.broadcast.emit('new character', {code:character.code, x:character.x, y:character.y, id:character.id});		
+			socket.broadcast.emit('new character', {code:character.code, x:character.x, y:character.y, id:character.id, chartxt:chartxt, playername:playername});		
 
 			for(var chidx in characters){
 				var ch = characters[chidx];
 				//console.log(ch);
-				socket.emit('new character', {code:ch.code, x:ch.x, y:ch.y, id:ch.id}); 
+				socket.emit('new character', {code:ch.code, x:ch.x, y:ch.y, id:ch.id, chartxt:ch.chartxt, playername:ch.playername}); 
 			}
 		});
 		characters[chara_counter] = character;
@@ -67,7 +67,7 @@ io.sockets.on('connection', function (socket) {
 		socket.get('character', function (err, ch) {
 			if( ch ){
 				if (debug_flg) log(' msg push '+msg);
-				socket.broadcast.emit('msg push', ch.id, msg);
+				socket.broadcast.emit('msg push', ch.id, ch.playername, msg);
 			}
 		});
 		if (debug_flg) log(' msg push '+msg);
