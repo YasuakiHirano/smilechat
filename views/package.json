@@ -1,0 +1,21 @@
+{
+	"name": "smilechat"
+  , "version": "0.0.1"
+  , "dependencies": {
+      "express": "2.5.9"
+    , "ejs": ">= 0.0.1"
+	, "socket.io": "0.9.6"
+	, "socket.io-client": "0.9.6"
+	, "opts": "1.2.2"
+  }
+  , "dependencies": {
+  	"express": "2.5.9",
+    "ejs": ">= 0.0.1",
+ 	"socket.io": "0.9.6",
+	"socket.io-client": "0.9.6"
+  }
+  , "engines": {
+  	"node": "0.10.x",
+	"npm": "1.4.28"
+  }
+}
