@@ -13,6 +13,8 @@ Demo Site
 https://smilechat.herokuapp.com/
 
 Reference Repository
-
 https://github.com/kojitaro/avatar_chat_js
 Thanks
+
+v1.0 Simple
+Html , jQuery Only Vertion
